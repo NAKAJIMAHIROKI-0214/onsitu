@@ -1,0 +1,303 @@
+import wave
+import struct
+import math
+import os
+from scipy import fromstring, int16
+import cv2
+import librosa
+import librosa.display
+import numpy as np
+import matplotlib.pyplot as plt
+import shutil
+import os
+
+shutil.rmtree("C:/Users/turar/Anaconda3/lib/site-packages/audioread/mp3full")
+shutil.rmtree("C:/Users/turar/Anaconda3/lib/site-packages/audioread/hairezofull")
+
+f_name = 'C:/Users/turar/anaconda3/lib/site-packages/audioread/きっと忘れないmp3full'
+ 
+
+cut_time = 1
+ 
+file = os.path.exists("mp3full")
+
+ 
+if file == False:
+    os.mkdir("mp3full")
+ 
+def wav_cut(filename,time): 
+
+    wavf = filename + '.wav'
+    wr = wave.open(wavf, 'r')
+ 
+    ch = wr.getnchannels()
+    width = wr.getsampwidth()
+    fr = wr.getframerate()
+    fn = wr.getnframes()
+    total_time = 1.0 * fn / fr
+    integer = math.floor(total_time) 
+    t = int(time)
+    frames = int(ch * fr * t)
+    num_cut = int(integer//t)
+ 
+
+    data = wr.readframes(wr.getnframes())
+    wr.close()
+    X = fromstring(data, dtype=int16)
+ 
+ 
+    for i in range(num_cut):
+        outf = 'mp3full/' + str(i) + '.wav' 
+        start_cut = i*frames
+        end_cut = i*frames + frames
+       
+        Y = X[start_cut:end_cut]
+        outd = struct.pack("h" * len(Y), *Y)
+ 
+        ww = wave.open(outf, 'w')
+        ww.setnchannels(ch)
+        ww.setsampwidth(width)
+        ww.setframerate(fr)
+        ww.writeframes(outd)
+        ww.close()
+ 
+wav_cut(f_name,cut_time)
+
+source='C:/Users/turar/.spyder-py3/mp3full'
+destination="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+shutil.move(source, destination)
+
+a_name = 'C:/Users/turar/anaconda3/lib/site-packages/audioread/きっと忘れないハイレゾfull'
+ 
+
+cut_time = 1
+ 
+file = os.path.exists("hairezofull")
+
+ 
+if file == False:
+    os.mkdir("hairezofull")
+ 
+def wav_cut(file2,time): 
+
+    wava = file2 + '.wav'
+    wr = wave.open(wava, 'r')
+ 
+    b = wr.getnchannels()
+    width = wr.getsampwidth()
+    fr = wr.getframerate()
+    fn = wr.getnframes()
+    total_time = 1.0 * fn / fr
+    integer = math.floor(total_time) 
+    t = int(time)
+    frames = int(b * fr * t)
+    num_cut = int(integer//t)
+ 
+
+    data = wr.readframes(wr.getnframes())
+    wr.close()
+    X = fromstring(data, dtype=int16)
+ 
+ 
+    for i in range(num_cut):
+        outa = 'hairezofull/' + str(i) + '.wav' 
+        start_cut = i*frames
+        end_cut = i*frames + frames
+       
+        Y = X[start_cut:end_cut]
+        outd = struct.pack("h" * len(Y), *Y)
+ 
+        ww = wave.open(outa, 'w')
+        ww.setnchannels(b)
+        ww.setsampwidth(width)
+        ww.setframerate(fr)
+        ww.writeframes(outd)
+        ww.close()
+ 
+wav_cut(a_name,cut_time)
+
+source2='C:/Users/turar/.spyder-py3/hairezofull'
+destination2="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+shutil.move(source2, destination2)
+
+#os.remove("C:/Users/turar/Anaconda3/lib/site-packages/audioread/img.png")
+#os.remove("C:/Users/turar/Anaconda3/lib/site-packages/audioread/img2.png")
+#os.remove("C:/Users/turar/Anaconda3/lib/site-packages/audioread/img3.png")
+#os.remove("C:/Users/turar/Anaconda3/lib/site-packages/audioread/img4.png")
+#os.remove("C:/Users/turar/Anaconda3/lib/site-packages/audioread/img5.png")
+#os.remove("C:/Users/turar/Anaconda3/lib/site-packages/audioread/img6.png") 2回目以降は外してください
+
+sr=96000
+y, sr_ = librosa.load("C:/Users/turar/Anaconda3/lib/site-packages/audioread/mp3full/4.wav", sr=sr)
+D = np.abs(librosa.stft(y))
+fig=plt.figure(figsize=(10,4))
+librosa.display.specshow(librosa.amplitude_to_db(D, ref=np.max),  y_axis='hz', x_axis='time', sr=sr)
+
+
+plt.colorbar(format='%+2.0f dB')
+plt.yscale('linear')  
+plt.ylim(0, 25000)
+plt.tight_layout()
+
+fig.savefig("img.png")
+
+y, sr_ = librosa.load("C:/Users/turar/Anaconda3/lib/site-packages/audioread/hairezofull/4.wav", sr=sr)
+D = np.abs(librosa.stft(y))
+fig2=plt.figure(figsize=(10,4))
+librosa.display.specshow(librosa.amplitude_to_db(D, ref=np.max),  y_axis='hz', x_axis='time', sr=sr)
+
+
+plt.colorbar(format='%+2.0f dB')
+plt.yscale('linear')  
+plt.ylim(0, 25000)
+plt.tight_layout()
+
+fig2.savefig("img2.png")
+
+y, sr_ = librosa.load("C:/Users/turar/Anaconda3/lib/site-packages/audioread/mp3full/89.wav", sr=sr)
+D = np.abs(librosa.stft(y))
+fig3=plt.figure(figsize=(10,4))
+librosa.display.specshow(librosa.amplitude_to_db(D, ref=np.max),  y_axis='hz', x_axis='time', sr=sr)
+
+
+plt.colorbar(format='%+2.0f dB')
+plt.yscale('linear')  
+plt.ylim(0, 25000)
+plt.tight_layout()
+
+fig3.savefig("img3.png")
+
+y, sr_ = librosa.load("C:/Users/turar/Anaconda3/lib/site-packages/audioread/hairezofull/89.wav", sr=sr)
+D = np.abs(librosa.stft(y))
+fig4=plt.figure(figsize=(10,4))
+librosa.display.specshow(librosa.amplitude_to_db(D, ref=np.max),  y_axis='hz', x_axis='time', sr=sr)
+
+
+plt.colorbar(format='%+2.0f dB')
+plt.yscale('linear')  
+plt.ylim(0, 25000)
+plt.tight_layout()
+
+fig4.savefig("img4.png")
+
+y, sr_ = librosa.load("C:/Users/turar/Anaconda3/lib/site-packages/audioread/mp3full/179.wav", sr=sr)
+D = np.abs(librosa.stft(y))
+fig5=plt.figure(figsize=(10,4))
+librosa.display.specshow(librosa.amplitude_to_db(D, ref=np.max),  y_axis='hz', x_axis='time', sr=sr)
+
+plt.colorbar(format='%+2.0f dB')
+plt.yscale('linear')  
+plt.ylim(0, 25000)
+plt.tight_layout()
+
+fig5.savefig("img5.png")
+
+y, sr_ = librosa.load("C:/Users/turar/Anaconda3/lib/site-packages/audioread/hairezofull/179.wav", sr=sr)
+D = np.abs(librosa.stft(y))
+fig6=plt.figure(figsize=(10,4))
+librosa.display.specshow(librosa.amplitude_to_db(D, ref=np.max),  y_axis='hz', x_axis='time', sr=sr)
+
+
+plt.colorbar(format='%+2.0f dB')
+plt.yscale('linear')  
+plt.ylim(0, 25000)
+plt.tight_layout()
+
+fig6.savefig("img6.png")
+
+
+source='C:/Users/turar/.spyder-py3/img.png'
+destination="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+
+source2='C:/Users/turar/.spyder-py3/img2.png'
+destination2="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+
+
+source3='C:/Users/turar/.spyder-py3/img3.png'
+destination3="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+
+source4='C:/Users/turar/.spyder-py3/img4.png'
+destination4="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+
+source5='C:/Users/turar/.spyder-py3/img5.png'
+destination5="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+
+source6='C:/Users/turar/.spyder-py3/img6.png'
+destination6="C:/Users/turar/Anaconda3/lib/site-packages/audioread"
+
+shutil.move(source, destination)
+shutil.move(source2, destination2)
+shutil.move(source3, destination3)
+shutil.move(source4, destination4)
+shutil.move(source5, destination5)
+shutil.move(source6, destination6)
+
+
+fname_1 = ('C:/Users/turar/anaconda3/lib/site-packages/audioread/img.png') 
+fname_2 = ('C:/Users/turar/anaconda3/lib/site-packages/audioread/img2.png') 
+
+img = cv2.imread(fname_1)
+
+
+trim_img = img[20 : 219, 60: 575]
+cv2.imwrite("trim_img.png", trim_img)
+
+template = cv2.imread(fname_2)
+
+
+trim_img2 = template[20 : 219, 60: 575]
+cv2.imwrite("trim_img2.png", trim_img2)
+
+
+res = cv2.matchTemplate(trim_img, trim_img2, cv2.TM_CCOEFF_NORMED)
+
+print('      5秒後         =',res)
+cv2.imwrite("trim_img.png", trim_img)
+cv2.imwrite("trim_img2.png", trim_img2)
+
+
+fname_3 = ('C:/Users/turar/anaconda3/lib/site-packages/audioread/img3.png') 
+fname_4 = ('C:/Users/turar/anaconda3/lib/site-packages/audioread/img4.png') 
+
+img = cv2.imread(fname_3)
+
+
+trim_img3 = img[20 : 219, 60: 575]
+cv2.imwrite("trim_img3.png", trim_img3)
+
+template = cv2.imread(fname_4)
+
+
+trim_img4 = template[20 : 219, 60: 575]
+cv2.imwrite("trim_img4.png", trim_img4)
+
+
+res90 = cv2.matchTemplate(trim_img3, trim_img4, cv2.TM_CCOEFF_NORMED)
+
+print('      1分30秒後     =',res90)
+cv2.imwrite("trim_img3.png", trim_img3)
+cv2.imwrite("trim_img4.png", trim_img4)
+
+fname_5 = ('C:/Users/turar/anaconda3/lib/site-packages/audioread/img5.png') 
+fname_6 = ('C:/Users/turar/anaconda3/lib/site-packages/audioread/img6.png') 
+
+img = cv2.imread(fname_5)
+
+
+trim_img5 = img[20 : 219, 60: 575]
+cv2.imwrite("trim_img5.png", trim_img5)
+
+template = cv2.imread(fname_6)
+
+
+trim_img6 = template[20 : 219, 60: 575]
+cv2.imwrite("trim_img6.png", trim_img6)
+
+
+res180 = cv2.matchTemplate(trim_img5, trim_img6, cv2.TM_CCOEFF_NORMED)
+
+print('      3分後         =',res180)
+cv2.imwrite("trim_img5.png", trim_img5)
+cv2.imwrite("trim_img6.png", trim_img6)
+
+print('Degree of similarity=', res/3+res90/3+res180/3)
